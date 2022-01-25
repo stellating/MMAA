@@ -16,7 +16,7 @@ The pre-trained R2Gen models. You can download the models and run them on the co
 
 | Section   | BaiduNetDisk                                                 | GoogleDrive                                                  | Description                          |
 | --------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
-| IU X-Ray  | [download](https://pan.baidu.com/s/1JEFepQt4OVQvMrUwnK3low) (Password: mqjc) | [download](https://drive.google.com/file/d/1fQXpf4vz5t2QYQ89iRXv0U_OVA0MNCtJ/view?usp=sharing) | R2Gen model trained on **IU X-Ray**  |
+| IU X-Ray  | [download](https://pan.baidu.com/s/1JEFepQt4OVQvMrUwnK3low) (Password: mqjc) | [download](https://drive.google.com/drive/folders/186KDV48o-jtK09b4yzNHbfo-kQDUyEsw?usp=sharing) | R2Gen model trained on **IU X-Ray**  |
 ## Datasets
 We use a public dataset (IU X-Ray) in our paper.
 
