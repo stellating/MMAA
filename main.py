@@ -60,6 +60,7 @@ def parse_agrs():
     parser.add_argument('--output_logsoftmax', type=int, default=1, help='whether to output the probabilities.')
     parser.add_argument('--decoding_constraint', type=int, default=0, help='whether decoding constraint.')
     parser.add_argument('--block_trigrams', type=int, default=1, help='whether to use block trigrams.')
+    parser.add_argument('--resume_omit', default=[], type=str, nargs='*')
 
     # Trainer settings
     parser.add_argument('--n_gpu', type=int, default=1, help='the number of gpus to be used.')
@@ -97,7 +98,7 @@ def parse_agrs():
                         help="Number of encoding layers in the transformer")
     parser.add_argument('--dec_layers', default=2, type=int,
                         help="Number of decoding layers in the transformer")
-    parser.add_argument('--dim_feedforward', default=256, type=int,
+    parser.add_argument('--dim_feedforward', default=8192, type=int,
                         help="Intermediate size of the feedforward layers in the transformer blocks")
     parser.add_argument('--hidden_dim', default=2048, type=int,
                         help="Size of the embeddings (dimension of the transformer)")
