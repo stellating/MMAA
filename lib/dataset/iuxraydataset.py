@@ -28,7 +28,7 @@ def image_loader(path,transform):
 
     return image
 
-class ThyroidDataset(data.Dataset):
+class IUXrayDataset(data.Dataset):
     def __init__(self, split, num_labels, root, img_root, transform=None,  testing=False):
         self.root = root
         self.phase = split
@@ -41,9 +41,8 @@ class ThyroidDataset(data.Dataset):
         self.epoch = 1
 
     def get_anno(self):
-        list_path = os.path.join(self.root, '{}_anno.json'.format(self.phase))
-        self.img_list = json.load(open(list_path, 'r'))
-        self.cat2idx = json.load(open(os.path.join(self.root, 'category.json'), 'r'))
+        self.img_list = json.loads(open(os.path.join(self.root,'iuxray_label_40_annotation.json'), 'r').read())[self.phase]
+        self.cat2idx = json.load(open(os.path.join(self.root, 'iu_category_40.json'), 'r'))
 
     def __len__(self):
         return len(self.img_list)
@@ -56,26 +55,14 @@ class ThyroidDataset(data.Dataset):
         return self.get(item)
 
     def get(self, item):
-        image_ID = item['filename']
+        image_ID = item['image_path']
         # print(image_ID)
         img_name = os.path.join(self.img_root, image_ID)
         image = image_loader(img_name, self.transform)
 
-        labels_index = sorted(item['labels'])
+        labels_index = sorted(item['new_label'])
         labels = np.zeros(self.num_classes, np.float32)
         labels[labels_index] = 1
-        # labels = torch.Tensor(labels)
-        #
-        # unk_mask_indices = get_unk_mask_indices(image, self.testing, self.num_classes, self.known_labels)
-        #
-        # mask = labels.clone()
-        # mask.scatter_(0, torch.Tensor(unk_mask_indices).long(), -1)
-        #
-        # sample = {}
-        # sample['image'] = image
-        # sample['labels'] = labels
-        # sample['mask'] = mask
-        # sample['imageIDs'] = image_ID
         return image,labels
 
 

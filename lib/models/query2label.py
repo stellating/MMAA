@@ -66,17 +66,15 @@ class Qeruy2Label(nn.Module):
         hidden_dim = transfomer.d_model
         self.input_proj = nn.Conv2d(backbone.num_channels, hidden_dim, kernel_size=1)
         self.query_embed = nn.Embedding(num_class, hidden_dim)
-#         self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
         self.fc = GroupWiseLinear(num_class, hidden_dim, bias=True)
 
 
     def forward(self, input):
         src, pos = self.backbone(input)
         src, pos = src[-1], pos[-1]
-#         avg_feats = self.avg_fnt(src).squeeze().reshape(-1, src.size(1))
-        batch_size, feat_size, _, _ = src.shape
-        patch_feats = src.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
         # import ipdb; ipdb.set_trace()
+        batch_size, feat_size, _, _ = src.shape
+        patch_feats = src.reshape(batch_size, feat_size, -1).permute(0,2,1)
 
         query_input = self.query_embed.weight
         hs = self.transformer(self.input_proj(src), query_input, pos)[0] # B,K,d
@@ -110,19 +108,33 @@ def build_q2l(args):
     if not args.keep_input_proj:
         model.input_proj = nn.Identity()
         print("set model.input_proj to Indentify!")
-
+    
     if args.pre_resume:
         if os.path.isfile(args.pre_resume):
             print("=> loading checkpoint '{}'".format(args.pre_resume))
             checkpoint = torch.load(args.pre_resume)
-            model.load_state_dict(checkpoint, strict=True)
-            # state_dict = clean_state_dict(checkpoint.module.state_dict())
-            # model.module.load_state_dict(state_dict, strict=True)
+
+            if 'state_dict' in checkpoint:
+                state_dict = clean_state_dict(checkpoint['state_dict'])
+            elif 'model' in checkpoint:
+                state_dict = clean_state_dict(checkpoint['model'])
+            else:
+                raise ValueError("No model or state_dicr Found!!!")
+            print("Omitting {}".format(args.resume_omit))
+            # import ipdb; ipdb.set_trace()
+            for omit_name in args.resume_omit:
+                del state_dict[omit_name]
+            model.load_state_dict(state_dict, strict=False)
+            # model.module.load_state_dict(checkpoint['state_dict'])
+            print("=> loaded checkpoint '{}' (epoch {})"
+                  .format(args.pre_resume, checkpoint['epoch']))
             del checkpoint
-            # del state_dict
-            torch.cuda.empty_cache()
+            del state_dict
+            torch.cuda.empty_cache() 
         else:
             print("=> no checkpoint found at '{}'".format(args.pre_resume))
+    
+
     
 
     return model

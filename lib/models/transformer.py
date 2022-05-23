@@ -17,8 +17,7 @@ from typing import Optional, List
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor
-# from torch.nn import MultiheadAttention
-from .auxilary import *
+from torch.nn import MultiheadAttention
 
 
 
@@ -203,21 +202,6 @@ class TransformerEncoderLayer(nn.Module):
 
         self.debug_mode = False
         self.debug_name = None
-        self.attn_gradients=None
-        self.attention_map = None
-
-    def save_attn_gradients(self, attn_gradients):
-        self.attn_gradients = attn_gradients
-
-    def get_attn_gradients(self):
-        return self.attn_gradients
-
-    def save_attention_map(self, attention_map):
-        self.attention_map = attention_map
-
-    def get_attention_map(self):
-        return self.attention_map
-
 
     def with_pos_embed(self, tensor, pos: Optional[Tensor]):
         return tensor if pos is None else tensor + pos
@@ -228,14 +212,9 @@ class TransformerEncoderLayer(nn.Module):
                      src_key_padding_mask: Optional[Tensor] = None,
                      pos: Optional[Tensor] = None):
         q = k = self.with_pos_embed(src, pos)
-        need_map=False
-        if need_map:
-            src2, corr, attn, attn_weights = self.self_attn(q, k, value=src, attn_mask=src_mask,need_map=True,key_padding_mask=src_key_padding_mask)
-            self.save_attention_map(attn)
-            attn.register_hook(self.save_attn_gradients)
-        else:
-            src2, corr = self.self_attn(q, k, value=src, attn_mask=src_mask,
+        src2, corr = self.self_attn(q, k, value=src, attn_mask=src_mask,
                               key_padding_mask=src_key_padding_mask)
+        
 
         src = src + self.dropout1(src2)
         src = self.norm1(src)
@@ -294,18 +273,6 @@ class TransformerDecoderLayer(nn.Module):
         self.debug_name = None
         self.omit_selfattn = False
 
-    def save_attn_gradients(self, attn_gradients):
-        self.attn_gradients = attn_gradients
-
-    def get_attn_gradients(self):
-        return self.attn_gradients
-
-    def save_attention_map(self, attention_map):
-        self.attention_map = attention_map
-
-    def get_attention_map(self):
-        return self.attention_map
-
     def with_pos_embed(self, tensor, pos: Optional[Tensor]):
         return tensor if pos is None else tensor + pos
 
@@ -325,23 +292,11 @@ class TransformerDecoderLayer(nn.Module):
             tgt = tgt + self.dropout1(tgt2)
             tgt = self.norm1(tgt)
 
-        need_map=False
-
-        if need_map:
-            tgt2, sim_mat_2, attn, attn_weights  = self.multihead_attn(query=self.with_pos_embed(tgt, query_pos),
+        tgt2, sim_mat_2 = self.multihead_attn(query=self.with_pos_embed(tgt, query_pos),
                                 key=self.with_pos_embed(memory, pos),
-                                value=memory, attn_mask=memory_mask, need_map=True,
+                                value=memory, attn_mask=memory_mask,
                                 key_padding_mask=memory_key_padding_mask)
-            self.save_attention_map(attn)
-            attn.register_hook(self.save_attn_gradients)
-        else:
-            tgt2, sim_mat_2 = self.multihead_attn(query=self.with_pos_embed(tgt, query_pos),
-                                                                      key=self.with_pos_embed(memory, pos),
-                                                                      value=memory, attn_mask=memory_mask,
-                                                                      key_padding_mask=memory_key_padding_mask)
-
-
-
+        
         tgt = tgt + self.dropout2(tgt2)
         tgt = self.norm2(tgt)
 
@@ -402,7 +357,7 @@ def build_transformer(args):
         num_encoder_layers=args.enc_layers,
         num_decoder_layers=args.dec_layers,
         normalize_before=args.pre_norm,
-        return_intermediate_dec=True,
+        return_intermediate_dec=False,
         rm_self_attn_dec=not args.keep_other_self_attn_dec, 
         rm_first_self_attn=not args.keep_first_self_attn_dec,
     )

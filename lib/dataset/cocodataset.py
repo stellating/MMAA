@@ -37,18 +37,13 @@ class CoCoDataset(data.Dataset):
                 categories = self.getCategoryList(item[1])
                 label = self.getLabelVector(categories)
                 self.labels.append(label)
-            self.save_datalabels()
+            self.save_datalabels(labels_path)
         # import ipdb; ipdb.set_trace()
 
     def __getitem__(self, index):
         input = self.coco[index][0]
         if self.input_transform:
             input = self.input_transform(input)
- #            print(input.shape,self.labels[index])  #torch.Size([3, 448, 448]) [1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
- # 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
- # 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1.
- # 0. 0. 0. 0. 0. 0. 0. 0.]
-
         return input, self.labels[index]
 
 

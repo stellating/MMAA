@@ -44,8 +44,6 @@ def voc_mAP(imagessetfilelist, num, return_each=False):
         true_num = sum(tp)
         fp = np.cumsum(fp)
         tp = np.cumsum(tp)
-        if not true_num:
-            true_num=1
         rec = tp / float(true_num)
         prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
         ap = voc_ap(rec, prec, true_num)
