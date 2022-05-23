@@ -6,7 +6,7 @@ def build_optimizer(args, model):
     # # ed_params = filter(lambda x: id(x) not in ve_params, model.parameters())
     # ed_params = list(map(id, model.encoder_decoder.parameters()))
     optimizer = getattr(torch.optim, args.optim)(
-        [{'params': model.encoder_decoder.parameters(), 'lr': args.lr_ed}],
+        [{'params': model.parameters(), 'lr': args.lr_ed}],
         weight_decay=args.weight_decay,
         amsgrad=args.amsgrad
     )

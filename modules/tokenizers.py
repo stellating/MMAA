@@ -97,7 +97,7 @@ class Tokenizer(object):
     
     def get_IDX_CLS(self):
         IDX2CLS={}
-        with open('/media/gyt/00eebf84-091a-4eed-82b7-3f2c69ba217b/1-data/IUxray_data/iu_xray/iu_category_40.json','r') as j:
+        with open('data/iu_xray/iu_category_40.json','r') as j:
             lines = json.load(j)
         for c,line in lines.items():
             IDX2CLS[line]=c

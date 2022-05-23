@@ -330,12 +330,12 @@ class RelationalMemory(nn.Module):
         return next_memory
 
     def forward(self, inputs, mesh, memory):
-        # mesh = self.mlp_mesh(mesh)
-        # q = memory
-        # k = torch.cat([memory, mesh], 1)
-        # v = torch.cat([memory, mesh], 1)
-        # next_memory = memory + self.attn1(q, k, v)
-        # memory = next_memory + self.mlp1(next_memory)
+        mesh = self.mlp_mesh(mesh)
+        q = memory
+        k = torch.cat([memory, mesh], 1)
+        v = torch.cat([memory, mesh], 1)
+        next_memory = memory + self.attn1(q, k, v)
+        memory = memory + self.mlp1(next_memory)
 
         outputs = []
         for i in range(inputs.shape[1]):
