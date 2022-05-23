@@ -1,19 +1,55 @@
-# Multi-modal-medical-image-caption
+# MMAA: Multi-Modal Attribute-Aware framework for intelligent medical report generation
+This repository provides code for the paper, Automatic Medical Report Production Based on Collaborative Learning of Medical Image Features and Clinical Symptom Attributes. Please refer to our paper for better understanding the method.
+## Pipeline
+![image](https://user-images.githubusercontent.com/38779372/110201691-84edaa00-7e9f-11eb-94bb-1043dc82eba7.png)
+## Getting started
+### Environments
+* python 3.5
+* pytorch 1.8.1
+* torchvision 0.9.1
+* CUDA 11.1
+### Packages
+* numpy
+* pandas
+* time
+* pillow
+* json
+### Datasets
+Download from [IU X-Ray](https://drive.google.com/drive/folders/186KDV48o-jtK09b4yzNHbfo-kQDUyEsw?usp=sharing) or [baidupandisk](https://pan.baidu.com/s/1fdpo12x0YgcXJ62a1K3-Gg) with the password of '62ui', prepare dataset in data directory as follows.
+```
+MMAA
+│   lib
+|   models
+│   modules
+└───data
+│   │   iu_xray
+│   │   │   images
+            └───images_normalized
+│   │   │   iuxray_label_40_annotation.json
+└───README.md
+```
+### Running
+__0.Clone this repo:__  
+```
+  git clone https://github.com/stellating/MMAA.git
+  cd MMAA
+```
+__1.Train:__  
+Train a model on the IU X-Ray data.
+```
+sh run_iu_xray.sh 
+``` 
+__2.Test:__  
+The pretrained model can be download from [here]() or [BaiduNetdisk](https://pan.baidu.com/s/1BWE3V2WPjB8ffu9j8ri2_Q) with the password of 'duz8'.
+```
+sh test_iu_xray.sh
+```
+__3.Performance__  
 
-This is the implementation of [Multi-modal Multi-label Medical Image Caption with Semantic Consistency].
+**IU X-Ray**  
+BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 | CIDER | METER | ROUGE | SPICE  
+---- | ---- | ----| ---- | ----  
+49.99 | 31.81 | 22.60 | 16.96 | 33.77 | 19.96 | 39.21 | 31.16 
 
-## Requirements
-
-- `torch==1.8.1`
-- `torchvision==0.9.1`
-- `opencv-python==4.5.2.52`
-
-
-## Datasets
-We use a public dataset (IU X-Ray) in our paper.
-
-For `IU X-Ray`, you can download the dataset from [here](https://drive.google.com/drive/folders/186KDV48o-jtK09b4yzNHbfo-kQDUyEsw?usp=sharing) and then put the files in `data/iu_xray`.
-
-## Run on IU X-Ray
-
-Run `bash run_iu_xray.sh` to train a model on the IU X-Ray data.
+### Acknowledge  
+Some of our codes (i.e., two peer networks) are referring to [cuhksz-nlp/R2Gen](https://github.com/cuhksz-nlp/R2Gen). Thanks for their helpful works.
