@@ -1,7 +1,7 @@
 # MMAA: Multi-Modal Attribute-Aware framework for intelligent medical report generation
 This repository provides code for the paper, Automatic Medical Report Production Based on Collaborative Learning of Medical Image Features and Clinical Symptom Attributes. Please refer to our paper for better understanding the method.
 ## Pipeline
-![image](https://user-images.githubusercontent.com/38779372/110201691-84edaa00-7e9f-11eb-94bb-1043dc82eba7.png)
+![image](https://github.com/stellating/MMAA/blob/main/img/framework.pdf)
 ## Getting started
 ### Environments
 * python 3.5
