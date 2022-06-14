@@ -52,4 +52,4 @@ BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 | CIDER | METER | ROUGE | SPICE
 49.99 | 31.81 | 22.60 | 16.96 | 33.77 | 19.96 | 39.21 | 31.16 
 
 ### Acknowledge  
-Some of our codes (i.e., two peer networks) are referring to [cuhksz-nlp/R2Gen](https://github.com/cuhksz-nlp/R2Gen). Thanks for their helpful works.
+Some of our codes are referring to [cuhksz-nlp/R2Gen](https://github.com/cuhksz-nlp/R2Gen). Thanks for their helpful works.
